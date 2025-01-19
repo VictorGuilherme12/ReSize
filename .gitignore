@@ -1,0 +1,13 @@
+.vs/
+*.vcxproj.user
+*.opendb
+*.opensdf
+*.suo
+*.exe
+*.obj
+*.pdb
+*.ipch
+*.idb
+*.log
+Debug/
+Release/
