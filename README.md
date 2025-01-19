@@ -1,7 +1,7 @@
-# Monitor Configuration Tool for Fortnite | Ferramenta de Configuração de Monitor para Fortnite
+# Monitor Configuration Tool | Ferramenta de Configuração de Monitor
 
 [English]
-A simple C++ utility that automatically configures monitor settings for Fortnite gaming sessions. This tool allows quick switching of monitor resolution and primary display settings with a single click.
+A simple C++ utility that automatically configures monitor settings for gaming sessions. This tool allows quick switching of monitor resolution and primary display settings with a single click.
 
 ## Features
 - Automatically changes monitor resolution to 1920x1080 
@@ -17,7 +17,7 @@ A simple C++ utility that automatically configures monitor settings for Fortnite
 -------------------------------------------
 
 [Português]
-Uma ferramenta simples em C++ que configura automaticamente as configurações do monitor para sessões de jogo do Fortnite. Esta ferramenta permite alternar rapidamente a resolução do monitor e as configurações de exibição principal com um único clique.
+Uma ferramenta simples em C++ que configura automaticamente as configurações do monitor para sessões de Gameplay. Esta ferramenta permite alternar rapidamente a resolução do monitor e as configurações de exibição principal com um único clique.
 
 ## Funcionalidades
 - Altera automaticamente a resolução do monitor para 1920x1080
