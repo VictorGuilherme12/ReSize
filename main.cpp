@@ -6,11 +6,11 @@
 #include <vector>
 
 struct MonitorInfo {
-    std::wstring deviceName;
-    int width;
-    int height;
-    bool isPrimary;
-    DWORD stateFlags;
+    std::wstring deviceName = L"";
+    int width = 0;
+    int height = 0;
+    bool isPrimary = false;
+    DWORD stateFlags = 0;
 };
 
 std::vector<MonitorInfo> EnumerateAllMonitors() {
