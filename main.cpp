@@ -16,6 +16,11 @@ int main() {
 
         std::wcout << L"=== Monitor Configuration Diagnostic Tool ===\n" << std::endl;
 
+        // Criando uma instância de MonitorInfo para exemplo
+        MonitorInfo monitor;
+        monitor.deviceName = L"Monitor 1";
+        monitor.orientation = Orientation::Portrait; // Definindo a orientação para Portrait
+
         // Get all monitor information
         auto monitors = EnumerateAllMonitors();
 
@@ -36,6 +41,7 @@ int main() {
             std::wcout << L"Device: " << it4K->deviceName << std::endl;
             std::wcout << L"Current resolution: " << it4K->width << L"x" << it4K->height << std::endl;
             std::wcout << L"Primary: " << (it4K->isPrimary ? L"Yes" : L"No") << std::endl;
+             std::wcout << L"Orientation: " << orientationToString(monitor.orientation) << std::endl;
 
             // Determine current mode and switch
             if (it4K->width == 1920 && it4K->height == 1080 && it4K->isPrimary) {
