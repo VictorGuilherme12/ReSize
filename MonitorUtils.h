@@ -5,7 +5,6 @@
 #include <string>
 #include "MonitorInfo.h"
 
-
 // Enumerates all monitors connected to the system
 std::vector<MonitorInfo> EnumerateAllMonitors();
 
