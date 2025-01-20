@@ -5,6 +5,7 @@
 #include <string>
 #include "MonitorInfo.h"
 
+
 // Enumerates all monitors connected to the system
 std::vector<MonitorInfo> EnumerateAllMonitors();
 
@@ -15,3 +16,5 @@ bool ChangeResolution(const std::wstring& deviceName, int width, int height);
 bool SetPrimaryMonitor(const std::wstring& deviceName);
 
 #endif // MONITORUTILS_H
+
+
