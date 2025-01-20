@@ -16,10 +16,10 @@ int main() {
 
         std::wcout << L"=== Monitor Configuration Diagnostic Tool ===\n" << std::endl;
 
-        // Criando uma instância de MonitorInfo para exemplo
+        // Criando uma instÃ¢ncia de MonitorInfo para exemplo
         MonitorInfo monitor;
         monitor.deviceName = L"Monitor 1";
-        monitor.orientation = Orientation::Portrait; // Definindo a orientação para Portrait
+        monitor.orientation = Orientation::Portrait; // Definindo a orientaÃ§Ã£o para Portrait
 
         // Get all monitor information
         auto monitors = EnumerateAllMonitors();
