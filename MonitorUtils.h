@@ -15,5 +15,3 @@ bool ChangeResolution(const std::wstring& deviceName, int width, int height);
 bool SetPrimaryMonitor(const std::wstring& deviceName);
 
 #endif // MONITORUTILS_H
-
-
