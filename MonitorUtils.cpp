@@ -119,7 +119,7 @@ bool SetPrimaryMonitor(const wstring& deviceName) {
     return true;
 }
 
-void TogglePrimaryMonitor() {
+void static TogglePrimaryMonitor() {
     // Obtenha todos os monitores
     vector<MonitorInfo> monitors = EnumerateAllMonitors();
     if (monitors.size() < 2) {
