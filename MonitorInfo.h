@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <windows.h>
+using namespace std;
 
 struct Position {
     int x;
@@ -8,7 +9,7 @@ struct Position {
 };
 
 struct MonitorInfo {
-    std::wstring deviceName;
+    wstring deviceName;
     DWORD stateFlags;
     bool isPrimary;
     int width;
@@ -17,7 +18,7 @@ struct MonitorInfo {
     DWORD orientation;
 };
 
-inline std::wstring orientationToString(DWORD orientation) {
+inline wstring orientationToString(DWORD orientation) {
     switch (orientation) {
     case DMDO_DEFAULT:
         return L"Landscape";

@@ -2,8 +2,8 @@
 #include <windows.h>
 #include <iostream>
 
-std::vector<MonitorInfo> EnumerateAllMonitors() {
-    std::vector<MonitorInfo> monitors;
+vector<MonitorInfo> EnumerateAllMonitors() {
+    vector<MonitorInfo> monitors;
     DISPLAY_DEVICE dd = { sizeof(DISPLAY_DEVICE), {0} };
     DWORD deviceNum = 0;
     while (EnumDisplayDevices(NULL, deviceNum, &dd, 0)) {
@@ -33,11 +33,11 @@ std::vector<MonitorInfo> EnumerateAllMonitors() {
     return monitors;
 }
 
-bool ChangeResolution(const std::wstring& deviceName, int width, int height) {
+bool ChangeResolution(const wstring& deviceName, int width, int height) {
     DEVMODE dm = { 0 };
     dm.dmSize = sizeof(DEVMODE);
     if (!EnumDisplaySettings(deviceName.c_str(), ENUM_CURRENT_SETTINGS, &dm)) {
-        std::wcout << L"Failed to get current display settings. Error code: " << GetLastError() << std::endl;
+        wcout << L"Failed to get current display settings. Error code: " << GetLastError() << endl;
         return false;
     }
     dm.dmPelsWidth = width;
@@ -57,11 +57,11 @@ bool ChangeResolution(const std::wstring& deviceName, int width, int height) {
     return (result == DISP_CHANGE_SUCCESSFUL);
 }
 
-bool SetMonitorPosition(const std::wstring& deviceName, int x, int y, bool isPrimary) {
+bool SetMonitorPosition(const wstring& deviceName, int x, int y, bool isPrimary) {
     DEVMODE dm = { 0 };
     dm.dmSize = sizeof(DEVMODE);
     if (!EnumDisplaySettings(deviceName.c_str(), ENUM_CURRENT_SETTINGS, &dm)) {
-        std::wcout << L"Failed to get display settings. Error code: " << GetLastError() << std::endl;
+        wcout << L"Failed to get display settings. Error code: " << GetLastError() << endl;
         return false;
     }
 
@@ -88,13 +88,13 @@ bool SetMonitorPosition(const std::wstring& deviceName, int x, int y, bool isPri
     return (result == DISP_CHANGE_SUCCESSFUL);
 }
 
-bool SetPrimaryMonitor(const std::wstring& deviceName) {
+bool SetPrimaryMonitor(const wstring& deviceName) {
     DEVMODE dm = { 0 };
     dm.dmSize = sizeof(DEVMODE);
 
     // Obtém as configurações de exibição atuais
     if (!EnumDisplaySettings(deviceName.c_str(), ENUM_CURRENT_SETTINGS, &dm)) {
-        std::wcout << L"Failed to get display settings. Error code: " << GetLastError() << std::endl;
+        wcout << L"Failed to get display settings. Error code: " << GetLastError() << endl;
         return false;
     }
 
@@ -111,7 +111,7 @@ bool SetPrimaryMonitor(const std::wstring& deviceName) {
     );
 
     if (result != DISP_CHANGE_SUCCESSFUL) {
-        std::wcout << L"Failed to set primary monitor. Error code: " << result << std::endl;
+        wcout << L"Failed to set primary monitor. Error code: " << result << endl;
         return false;
     }
 
@@ -121,9 +121,9 @@ bool SetPrimaryMonitor(const std::wstring& deviceName) {
 
 void TogglePrimaryMonitor() {
     // Obtenha todos os monitores
-    std::vector<MonitorInfo> monitors = EnumerateAllMonitors();
+    vector<MonitorInfo> monitors = EnumerateAllMonitors();
     if (monitors.size() < 2) {
-        std::wcout << L"Insufficient monitors to toggle." << std::endl;
+        wcout << L"Insufficient monitors to toggle." << endl;
         return;
     }
 
@@ -131,12 +131,12 @@ void TogglePrimaryMonitor() {
     for (size_t i = 0; i < monitors.size(); i++) {
         if (i == 0) {
             // Defina o primeiro monitor como primário
-            std::wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << std::endl;
+            wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << endl;
             SetPrimaryMonitor(monitors[i].deviceName);
         }
         else if (i == 1) {
             // Defina o segundo monitor como primário
-            std::wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << std::endl;
+            wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << endl;
             SetPrimaryMonitor(monitors[i].deviceName);
         }
     }

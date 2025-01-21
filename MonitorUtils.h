@@ -3,7 +3,7 @@
 #include <vector>
 #include "MonitorInfo.h"
 
-std::vector<MonitorInfo> EnumerateAllMonitors();
-bool ChangeResolution(const std::wstring& deviceName, int width, int height);
-bool SetPrimaryMonitor(const std::wstring& deviceName);
-bool SetMonitorPosition(const std::wstring& deviceName, int x, int y, bool isPrimary);
+vector<MonitorInfo> EnumerateAllMonitors();
+bool ChangeResolution(const wstring& deviceName, int width, int height);
+bool SetPrimaryMonitor(const wstring& deviceName);
+bool SetMonitorPosition(const wstring& deviceName, int x, int y, bool isPrimary);
