@@ -17,14 +17,10 @@ vector<MonitorInfo> EnumerateAllMonitors() {
             if (EnumDisplaySettings(dd.DeviceName, ENUM_CURRENT_SETTINGS, &dm)) {
                 info.width = dm.dmPelsWidth;
                 info.height = dm.dmPelsHeight;
-                info.position.x = dm.dmPosition.x;
-                info.position.y = dm.dmPosition.y;
             }
             else {
                 info.width = -1;
                 info.height = -1;
-                info.position.x = 0;
-                info.position.y = 0;
             }
             monitors.push_back(info);
         }
@@ -133,6 +129,7 @@ void static TogglePrimaryMonitor() {
             // Defina o primeiro monitor como primário
             wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << endl;
             SetPrimaryMonitor(monitors[i].deviceName);
+            
         }
         else if (i == 1) {
             // Defina o segundo monitor como primário

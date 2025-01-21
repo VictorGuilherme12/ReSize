@@ -3,18 +3,12 @@
 #include <windows.h>
 using namespace std;
 
-struct Position {
-    int x;
-    int y;
-};
-
 struct MonitorInfo {
     wstring deviceName;
     DWORD stateFlags;
     bool isPrimary;
     int width;
     int height;
-    Position position;
     DWORD orientation;
 };
 
