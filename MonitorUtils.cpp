@@ -53,37 +53,6 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
     return (result == DISP_CHANGE_SUCCESSFUL);
 }
 
-bool SetMonitorPosition(const wstring& deviceName, int x, int y, bool isPrimary) {
-    DEVMODE dm = { 0 };
-    dm.dmSize = sizeof(DEVMODE);
-    if (!EnumDisplaySettings(deviceName.c_str(), ENUM_CURRENT_SETTINGS, &dm)) {
-        wcout << L"Failed to get display settings. Error code: " << GetLastError() << endl;
-        return false;
-    }
-
-    dm.dmFields = DM_POSITION;
-    dm.dmPosition.x = x;
-    dm.dmPosition.y = y;
-
-    DWORD flags = CDS_UPDATEREGISTRY;
-    if (isPrimary) {
-        flags |= CDS_SET_PRIMARY;
-    }
-
-    // Primeiro tente sem CDS_UPDATEREGISTRY
-    LONG result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL, flags & ~CDS_UPDATEREGISTRY, NULL);
-
-    if (result == DISP_CHANGE_SUCCESSFUL) {
-        // Se for bem sucedido, aplique permanentemente
-        result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL, flags, NULL);
-
-        // Força a atualização das configurações
-        ChangeDisplaySettings(NULL, 0);
-    }
-
-    return (result == DISP_CHANGE_SUCCESSFUL);
-}
-
 bool SetPrimaryMonitor(const wstring& deviceName) {
     DEVMODE dm = { 0 };
     dm.dmSize = sizeof(DEVMODE);
