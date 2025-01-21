@@ -1,6 +1,7 @@
 #include "MonitorUtils.h"
 #include <windows.h>
 #include <iostream>
+using namespace std;
 
 vector<MonitorInfo> EnumerateAllMonitors() {
     vector<MonitorInfo> monitors;
@@ -63,15 +64,12 @@ bool SetPrimaryMonitor(const wstring& deviceName) {
         return false;
     }
 
-    // Define os campos a serem modificados (sem necessidade de DM_POSITION se não for mover)
-    dm.dmFields = DM_POSITION;
-
     // Aplica a mudança com a flag CDS_SET_PRIMARY
     LONG result = ChangeDisplaySettingsEx(
         deviceName.c_str(),
         &dm,
         NULL,
-        CDS_SET_PRIMARY | CDS_UPDATEREGISTRY, 
+        CDS_UPDATEREGISTRY, 
         NULL
     );
 
@@ -82,28 +80,4 @@ bool SetPrimaryMonitor(const wstring& deviceName) {
 
     // Sucesso!
     return true;
-}
-
-void static TogglePrimaryMonitor() {
-    // Obtenha todos os monitores
-    vector<MonitorInfo> monitors = EnumerateAllMonitors();
-    if (monitors.size() < 2) {
-        wcout << L"Insufficient monitors to toggle." << endl;
-        return;
-    }
-
-    // Alterne entre o primeiro e o segundo monitor
-    for (size_t i = 0; i < monitors.size(); i++) {
-        if (i == 0) {
-            // Defina o primeiro monitor como primário
-            wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << endl;
-            SetPrimaryMonitor(monitors[i].deviceName);
-            
-        }
-        else if (i == 1) {
-            // Defina o segundo monitor como primário
-            wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << endl;
-            SetPrimaryMonitor(monitors[i].deviceName);
-        }
-    }
 }
