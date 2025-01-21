@@ -48,7 +48,7 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
     if (result == DISP_CHANGE_SUCCESSFUL) {
         // Se for bem sucedido, aplique permanentemente
         result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL,
-            CDS_UPDATEREGISTRY | CDS_FULLSCREEN, NULL);
+            CDS_UPDATEREGISTRY | CDS_SET_PRIMARY | CDS_FULLSCREEN, NULL);
     }
 
     return (result == DISP_CHANGE_SUCCESSFUL);
@@ -69,7 +69,7 @@ bool SetPrimaryMonitor(const wstring& deviceName) {
         deviceName.c_str(),
         &dm,
         NULL,
-        CDS_UPDATEREGISTRY, 
+        CDS_UPDATEREGISTRY,
         NULL
     );
 
@@ -81,3 +81,4 @@ bool SetPrimaryMonitor(const wstring& deviceName) {
     // Sucesso!
     return true;
 }
+

@@ -89,7 +89,7 @@ int main() {
 
                 // Now ensure the 4K monitor is secondary
                 wcout << L"Ensuring 4K monitor is secondary..." << endl;
-             
+
             }
 
             // Get updated monitor information
