@@ -43,8 +43,17 @@ bool ChangeResolution(const std::wstring& deviceName, int width, int height) {
     dm.dmPelsWidth = width;
     dm.dmPelsHeight = height;
     dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+
+    // Primeiro tente sem CDS_UPDATEREGISTRY para uma mudança temporária
     LONG result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL,
-        CDS_UPDATEREGISTRY | CDS_FULLSCREEN, NULL);
+        CDS_FULLSCREEN, NULL);
+
+    if (result == DISP_CHANGE_SUCCESSFUL) {
+        // Se for bem sucedido, aplique permanentemente
+        result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL,
+            CDS_UPDATEREGISTRY | CDS_FULLSCREEN, NULL);
+    }
+
     return (result == DISP_CHANGE_SUCCESSFUL);
 }
 
@@ -65,68 +74,70 @@ bool SetMonitorPosition(const std::wstring& deviceName, int x, int y, bool isPri
         flags |= CDS_SET_PRIMARY;
     }
 
-    LONG result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL, flags, NULL);
+    // Primeiro tente sem CDS_UPDATEREGISTRY
+    LONG result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL, flags & ~CDS_UPDATEREGISTRY, NULL);
+
+    if (result == DISP_CHANGE_SUCCESSFUL) {
+        // Se for bem sucedido, aplique permanentemente
+        result = ChangeDisplaySettingsEx(deviceName.c_str(), &dm, NULL, flags, NULL);
+
+        // Força a atualização das configurações
+        ChangeDisplaySettings(NULL, 0);
+    }
+
     return (result == DISP_CHANGE_SUCCESSFUL);
 }
 
 bool SetPrimaryMonitor(const std::wstring& deviceName) {
-    auto monitors = EnumerateAllMonitors();
+    DEVMODE dm = { 0 };
+    dm.dmSize = sizeof(DEVMODE);
 
-    // Primeiro, encontre o monitor atual que é primário
-    MonitorInfo* currentPrimary = nullptr;
-    MonitorInfo* targetMonitor = nullptr;
-
-    for (auto& monitor : monitors) {
-        if (monitor.isPrimary) {
-            currentPrimary = &monitor;
-        }
-        if (monitor.deviceName == deviceName) {
-            targetMonitor = &monitor;
-        }
-    }
-
-    if (!targetMonitor) {
-        std::wcout << L"Target monitor not found!" << std::endl;
+    // Obtém as configurações de exibição atuais
+    if (!EnumDisplaySettings(deviceName.c_str(), ENUM_CURRENT_SETTINGS, &dm)) {
+        std::wcout << L"Failed to get display settings. Error code: " << GetLastError() << std::endl;
         return false;
     }
 
-    // Define o novo monitor primário na posição (0,0)
-    if (!SetMonitorPosition(deviceName, 0, 0, true)) {
-        std::wcout << L"Failed to set primary monitor!" << std::endl;
+    // Define os campos a serem modificados (sem necessidade de DM_POSITION se não for mover)
+    dm.dmFields = DM_POSITION;
+
+    // Aplica a mudança com a flag CDS_SET_PRIMARY
+    LONG result = ChangeDisplaySettingsEx(
+        deviceName.c_str(),
+        &dm,
+        NULL,
+        CDS_SET_PRIMARY | CDS_UPDATEREGISTRY, 
+        NULL
+    );
+
+    if (result != DISP_CHANGE_SUCCESSFUL) {
+        std::wcout << L"Failed to set primary monitor. Error code: " << result << std::endl;
         return false;
     }
 
-    // Se havia um monitor primário anterior, mova-o para a direita
-    if (currentPrimary && currentPrimary->deviceName != deviceName) {
-        if (!SetMonitorPosition(currentPrimary->deviceName, targetMonitor->width, 0, false)) {
-            std::wcout << L"Failed to reposition previous primary monitor!" << std::endl;
-            return false;
-        }
-    }
-
+    // Sucesso!
     return true;
 }
 
-bool SetSecondaryMonitor(const std::wstring& deviceName) {
-    auto monitors = EnumerateAllMonitors();
-    MonitorInfo* primaryMonitor = nullptr;
-    MonitorInfo* targetMonitor = nullptr;
-
-    // Encontra o monitor primário e o monitor alvo
-    for (auto& monitor : monitors) {
-        if (monitor.isPrimary) {
-            primaryMonitor = &monitor;
-        }
-        if (monitor.deviceName == deviceName) {
-            targetMonitor = &monitor;
-        }
+void TogglePrimaryMonitor() {
+    // Obtenha todos os monitores
+    std::vector<MonitorInfo> monitors = EnumerateAllMonitors();
+    if (monitors.size() < 2) {
+        std::wcout << L"Insufficient monitors to toggle." << std::endl;
+        return;
     }
 
-    if (!primaryMonitor || !targetMonitor) {
-        std::wcout << L"Required monitors not found!" << std::endl;
-        return false;
+    // Alterne entre o primeiro e o segundo monitor
+    for (size_t i = 0; i < monitors.size(); i++) {
+        if (i == 0) {
+            // Defina o primeiro monitor como primário
+            std::wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << std::endl;
+            SetPrimaryMonitor(monitors[i].deviceName);
+        }
+        else if (i == 1) {
+            // Defina o segundo monitor como primário
+            std::wcout << L"Setting " << monitors[i].deviceName << L" as primary monitor." << std::endl;
+            SetPrimaryMonitor(monitors[i].deviceName);
+        }
     }
-
-    // Posiciona o monitor secundário à direita do primário
-    return SetMonitorPosition(deviceName, primaryMonitor->width, 0, false);
 }

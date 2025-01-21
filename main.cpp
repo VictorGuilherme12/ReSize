@@ -52,32 +52,48 @@ int main() {
             if (it4K->width == 3840 && it4K->height == 2160) {
                 // If currently in 4K, switch to 1080p and set as primary
                 std::wcout << L"\nSwitching from 4K to 1080p..." << std::endl;
-                ChangeResolution(it4K->deviceName, 1920, 1080);
+                if (!ChangeResolution(it4K->deviceName, 1920, 1080)) {
+                    std::wcout << L"Failed to change resolution to 1080p!" << std::endl;
+                }
                 Sleep(1000);
-                SetPrimaryMonitor(it4K->deviceName);
+
+                std::wcout << L"Setting 1080p monitor as primary..." << std::endl;
+                if (!SetPrimaryMonitor(it4K->deviceName)) {
+                    std::wcout << L"Failed to set monitor as primary!" << std::endl;
+                }
             }
             else {
                 // If currently in 1080p or other resolution, switch to 4K and set as secondary
                 std::wcout << L"\nSwitching to 4K..." << std::endl;
-                ChangeResolution(it4K->deviceName, 3840, 2160);
+                if (!ChangeResolution(it4K->deviceName, 3840, 2160)) {
+                    std::wcout << L"Failed to change resolution to 4K!" << std::endl;
+                }
                 Sleep(1000);
 
-                // Find another monitor to set as primary
+                // Find and set another monitor as primary
+                bool primarySet = true;
                 for (const auto& monitor : monitors) {
                     if (monitor.deviceName != it4K->deviceName) {
                         std::wcout << L"Setting " << monitor.deviceName << L" as primary..." << std::endl;
-                        SetPrimaryMonitor(monitor.deviceName);
-                        Sleep(500);
-                        break;
+                        if (SetPrimaryMonitor(monitor.deviceName)) {
+                            primarySet = true;
+                            break;
+                        }
+                        else {
+                            std::wcout << L"Failed to set monitor as primary, trying next..." << std::endl;
+                        }
                     }
                 }
 
-                // Set the 4K monitor as secondary
-                std::wcout << L"Setting 4K monitor as secondary..." << std::endl;
-                SetSecondaryMonitor(it4K->deviceName);
+                Sleep(1000); // Wait for primary change to process
+
+                // Now ensure the 4K monitor is secondary
+                std::wcout << L"Ensuring 4K monitor is secondary..." << std::endl;
+             
             }
 
             // Get updated monitor information
+            Sleep(1000); // Wait for changes to take effect
             auto updatedMonitors = EnumerateAllMonitors();
             std::wcout << L"\nUpdated monitor configuration:" << std::endl;
             for (const auto& monitor : updatedMonitors) {
