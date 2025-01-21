@@ -32,7 +32,6 @@ int main() {
             wcout << L"\nDevice: " << monitor.deviceName << endl;
             wcout << L"Resolution: " << monitor.width << L"x" << monitor.height << endl;
             wcout << L"Primary: " << (monitor.isPrimary ? L"Yes" : L"No") << endl;
-            wcout << L"Position: (" << monitor.position.x << L"," << monitor.position.y << L")" << endl;
             wcout << L"Orientation: " << orientationToString(monitor.orientation) << endl;
         }
 
@@ -47,7 +46,6 @@ int main() {
             wcout << L"Device: " << it4K->deviceName << endl;
             wcout << L"Current resolution: " << it4K->width << L"x" << it4K->height << endl;
             wcout << L"Primary: " << (it4K->isPrimary ? L"Yes" : L"No") << endl;
-            wcout << L"Position: (" << it4K->position.x << L"," << it4K->position.y << L")" << endl;
             wcout << L"Orientation: " << orientationToString(it4K->orientation) << endl;
 
             // Determine current mode and switch
@@ -102,7 +100,6 @@ int main() {
                 wcout << L"\nDevice: " << monitor.deviceName << endl;
                 wcout << L"Resolution: " << monitor.width << L"x" << monitor.height << endl;
                 wcout << L"Primary: " << (monitor.isPrimary ? L"Yes" : L"No") << endl;
-                wcout << L"Position: (" << monitor.position.x << L"," << monitor.position.y << L")" << endl;
             }
         }
         else {
