@@ -4,12 +4,12 @@
 using namespace std;
 
 struct MonitorInfo {
-    wstring deviceName;
-    DWORD stateFlags;
-    bool isPrimary;
-    int width;
-    int height;
-    DWORD orientation;
+    wstring deviceName = L"Unknown";
+    DWORD stateFlags = 0;
+    bool isPrimary = false;
+    int width = -1;    
+    int height = -1;    
+    DWORD orientation = 0;
 };
 
 inline wstring orientationToString(DWORD orientation) {
