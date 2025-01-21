@@ -18,11 +18,20 @@ int main() {
 
         // Get all monitor information
         auto monitors = EnumerateAllMonitors();
-
         if (monitors.empty()) {
             std::wcout << L"No active display devices found!" << std::endl;
             system("pause");
             return 1;
+        }
+
+        // Print information about all monitors
+        std::wcout << L"Found " << monitors.size() << L" display devices:" << std::endl;
+        for (const auto& monitor : monitors) {
+            std::wcout << L"\nDevice: " << monitor.deviceName << std::endl;
+            std::wcout << L"Resolution: " << monitor.width << L"x" << monitor.height << std::endl;
+            std::wcout << L"Primary: " << (monitor.isPrimary ? L"Yes" : L"No") << std::endl;
+            std::wcout << L"Position: (" << monitor.position.x << L"," << monitor.position.y << L")" << std::endl;
+            std::wcout << L"Orientation: " << orientationToString(monitor.orientation) << std::endl;
         }
 
         // Find the 4K monitor (assuming it's the one with the highest resolution)
@@ -36,24 +45,46 @@ int main() {
             std::wcout << L"Device: " << it4K->deviceName << std::endl;
             std::wcout << L"Current resolution: " << it4K->width << L"x" << it4K->height << std::endl;
             std::wcout << L"Primary: " << (it4K->isPrimary ? L"Yes" : L"No") << std::endl;
+            std::wcout << L"Position: (" << it4K->position.x << L"," << it4K->position.y << L")" << std::endl;
             std::wcout << L"Orientation: " << orientationToString(it4K->orientation) << std::endl;
 
             // Determine current mode and switch
-            if (it4K->width == 1920 && it4K->height == 1080 && it4K->isPrimary) {
-                ChangeResolution(it4K->deviceName, 3840, 2160);
-                Sleep(1000);
-
-                for (const auto& monitor : monitors) {
-                    if (monitor.deviceName != it4K->deviceName) {
-                        SetPrimaryMonitor(monitor.deviceName);
-                        break;
-                    }
-                }
-            }
-            else {
+            if (it4K->width == 3840 && it4K->height == 2160) {
+                // If currently in 4K, switch to 1080p and set as primary
+                std::wcout << L"\nSwitching from 4K to 1080p..." << std::endl;
                 ChangeResolution(it4K->deviceName, 1920, 1080);
                 Sleep(1000);
                 SetPrimaryMonitor(it4K->deviceName);
+            }
+            else {
+                // If currently in 1080p or other resolution, switch to 4K and set as secondary
+                std::wcout << L"\nSwitching to 4K..." << std::endl;
+                ChangeResolution(it4K->deviceName, 3840, 2160);
+                Sleep(1000);
+
+                // Find another monitor to set as primary
+                for (const auto& monitor : monitors) {
+                    if (monitor.deviceName != it4K->deviceName) {
+                        std::wcout << L"Setting " << monitor.deviceName << L" as primary..." << std::endl;
+                        SetPrimaryMonitor(monitor.deviceName);
+                        Sleep(500);
+                        break;
+                    }
+                }
+
+                // Set the 4K monitor as secondary
+                std::wcout << L"Setting 4K monitor as secondary..." << std::endl;
+                SetSecondaryMonitor(it4K->deviceName);
+            }
+
+            // Get updated monitor information
+            auto updatedMonitors = EnumerateAllMonitors();
+            std::wcout << L"\nUpdated monitor configuration:" << std::endl;
+            for (const auto& monitor : updatedMonitors) {
+                std::wcout << L"\nDevice: " << monitor.deviceName << std::endl;
+                std::wcout << L"Resolution: " << monitor.width << L"x" << monitor.height << std::endl;
+                std::wcout << L"Primary: " << (monitor.isPrimary ? L"Yes" : L"No") << std::endl;
+                std::wcout << L"Position: (" << monitor.position.x << L"," << monitor.position.y << L")" << std::endl;
             }
         }
         else {
@@ -68,6 +99,5 @@ int main() {
         system("pause");
         return 1;
     }
-
     return 0;
 }

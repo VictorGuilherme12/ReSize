@@ -1,38 +1,33 @@
-#ifndef MONITORINFO_H
-#define MONITORINFO_H
-
+#pragma once
 #include <string>
-#include <Windows.h>
+#include <windows.h>
 
-enum class Orientation {
-    Landscape = 0,
-    Portrait = 90,
-    InvertedLandscape = 180, 
-    InvertedPortrait = 270,
+struct Position {
+    int x;
+    int y;
 };
 
 struct MonitorInfo {
-    std::wstring deviceName = L"";
-    int width = 0;
-    int height = 0;
-    bool isPrimary = false;
-    Orientation orientation = Orientation::Landscape;
-    DWORD stateFlags = 0;
+    std::wstring deviceName;
+    DWORD stateFlags;
+    bool isPrimary;
+    int width;
+    int height;
+    Position position;
+    DWORD orientation;
 };
 
-inline std::wstring orientationToString(Orientation orientation) {
+inline std::wstring orientationToString(DWORD orientation) {
     switch (orientation) {
-    case Orientation::Landscape:
+    case DMDO_DEFAULT:
         return L"Landscape";
-    case Orientation::Portrait:
+    case DMDO_90:
         return L"Portrait";
-    case Orientation::InvertedLandscape:
-        return L"Inverted Landscape";
-    case Orientation::InvertedPortrait:
-        return L"Inverted Portrait";
+    case DMDO_180:
+        return L"Landscape (flipped)";
+    case DMDO_270:
+        return L"Portrait (flipped)";
     default:
         return L"Unknown";
     }
 }
-
-#endif // MONITORINFO_H
