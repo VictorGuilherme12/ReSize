@@ -42,54 +42,43 @@ int main() {
             });
 
         if (it4K != monitors.end()) {
-            wcout << L"\n=== Found potential 4K monitor ===" << endl;
-            wcout << L"Device: " << it4K->deviceName << endl;
-            wcout << L"Current resolution: " << it4K->width << L"x" << it4K->height << endl;
-            wcout << L"Primary: " << (it4K->isPrimary ? L"Yes" : L"No") << endl;
-            wcout << L"Orientation: " << orientationToString(it4K->orientation) << endl;
+            // Target resolutions
+            const int TARGET_4K_WIDTH = 3840;
+            const int TARGET_4K_HEIGHT = 2160;
+            const int TARGET_FHD_WIDTH = 1920;
+            const int TARGET_FHD_HEIGHT = 1080;
 
-            // Determine current mode and switch
-            if (it4K->width == 3840 && it4K->height == 2160) {
-                // If currently in 4K, switch to 1080p and set as primary
+            // Current resolution check with more tolerance
+            bool is4K = (it4K->width >= 3840 && it4K->width <= 3860) &&
+                (it4K->height >= 2160 && it4K->height <= 2180);
+
+            if (is4K) {
+                // Switch to 1080p
                 wcout << L"\nSwitching from 4K to 1080p..." << endl;
-                if (!ChangeResolution(it4K->deviceName, 1920, 1080)) {
-                    wcout << L"Failed to change resolution to 1080p!" << endl;
-                }
-                Sleep(1000);
-
-                wcout << L"Setting 1080p monitor as primary..." << endl;
-                if (!SetPrimaryMonitor(it4K->deviceName)) {
-                    wcout << L"Failed to set monitor as primary!" << endl;
-                }
-            }
-            else {
-                // If currently in 1080p or other resolution, switch to 4K and set as secondary
-                wcout << L"\nSwitching to 4K..." << endl;
-                if (!ChangeResolution(it4K->deviceName, 3840, 2160)) {
-                    wcout << L"Failed to change resolution to 4K!" << endl;
-                }
-                Sleep(1000);
-
-                // Find and set another monitor as primary
-                bool primarySet = true;
-                for (const auto& monitor : monitors) {
-                    if (monitor.deviceName != it4K->deviceName) {
-                        wcout << L"Setting " << monitor.deviceName << L" as primary..." << endl;
-                        if (SetPrimaryMonitor(monitor.deviceName)) {
-                            primarySet = true;
-                            break;
-                        }
-                        else {
-                            wcout << L"Failed to set monitor as primary, trying next..." << endl;
+                if (ChangeResolution(it4K->deviceName, TARGET_FHD_WIDTH, TARGET_FHD_HEIGHT)) {
+                    // Try setting another monitor as primary
+                    for (const auto& monitor : monitors) {
+                        if (monitor.deviceName != it4K->deviceName) {
+                            if (SetPrimaryMonitor(monitor.deviceName)) {
+                                break;
+                            }
                         }
                     }
                 }
-
-                Sleep(1000); // Wait for primary change to process
-
-                // Now ensure the 4K monitor is secondary
-                wcout << L"Ensuring 4K monitor is secondary..." << endl;
-
+            }
+            else {
+                // Switch to 4K
+                wcout << L"\nSwitching to 4K..." << endl;
+                if (ChangeResolution(it4K->deviceName, TARGET_4K_WIDTH, TARGET_4K_HEIGHT)) {
+                    // Try setting another monitor as primary
+                    for (const auto& monitor : monitors) {
+                        if (monitor.deviceName != it4K->deviceName) {
+                            if (SetPrimaryMonitor(monitor.deviceName)) {
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             // Get updated monitor information
