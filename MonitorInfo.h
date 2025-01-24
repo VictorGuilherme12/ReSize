@@ -1,28 +1,17 @@
-#pragma once
+#ifndef MONITORINFO_H
+#define MONITORINFO_H
+
 #include <string>
-#include <windows.h>
-using namespace std;
+#include <windows.h>  // Para definir DWORD e outras funções da API do Windows
+#include <vector>
+#include <iostream>
 
 struct MonitorInfo {
-    wstring deviceName = L"Unknown";
-    DWORD stateFlags = 0;
-    bool isPrimary = false;
-    int width = -1;    
-    int height = -1;    
-    DWORD orientation = 0;
+    std::wstring deviceName;
+    int width;
+    int height;
+    bool isPrimary;
+    DWORD stateFlags;  // Definição correta para DWORD
 };
 
-inline wstring orientationToString(DWORD orientation) {
-    switch (orientation) {
-    case DMDO_DEFAULT:
-        return L"Landscape";
-    case DMDO_90:
-        return L"Portrait";
-    case DMDO_180:
-        return L"Landscape (flipped)";
-    case DMDO_270:
-        return L"Portrait (flipped)";
-    default:
-        return L"Unknown";
-    }
-}
+#endif // MONITORINFO_H
