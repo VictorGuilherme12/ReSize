@@ -96,7 +96,7 @@ bool SetPrimaryMonitor(const wstring& deviceName) {
             );
 
             if (result == DISP_CHANGE_SUCCESSFUL) {
-                wcout << L"Monitor primário configurado com sucesso." << endl;
+                wcout << L"Monitor primario configurado com sucesso." << endl;
                 return true;
             }
             else {

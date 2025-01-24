@@ -9,10 +9,10 @@ int main() {
     for (const auto& monitor : monitors) {
         wcout << L"Device: " << monitor.deviceName << L", Resolução: " << monitor.width << L"x" << monitor.height;
         if (monitor.isPrimary) {
-            wcout << L" (Primário)" << endl;
+            wcout << L" (Primario)" << endl;
         }
         else {
-            wcout << L" (Secundário)" << endl;
+            wcout << L" (Secundario)" << endl;
         }
     }
 
@@ -24,7 +24,7 @@ int main() {
 
     // Definir o monitor 1 como primário (DISPLAY1)
     if (SetPrimaryMonitor(targetDeviceName)) {
-        wcout << L"Monitor " << targetDeviceName << L" configurado como primário." << endl;
+        wcout << L"Monitor " << targetDeviceName << L" configurado como primario." << endl;
     }
 
     return 0;
