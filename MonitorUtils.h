@@ -7,8 +7,9 @@
 
 using namespace std;
 
-vector<MonitorInfo> EnumerateAllMonitors();
-bool ChangeResolution(const wstring& deviceName, int width, int height);
-bool SetPrimaryMonitor(const wstring& deviceName);
+
+std::vector<MonitorInfo> EnumerateAllMonitors();
+bool ChangeResolution(const std::wstring& deviceName, int width, int height);
+bool SetPrimaryMonitor(const std::wstring& deviceName);
 
 #endif // MONITORUTILS_H

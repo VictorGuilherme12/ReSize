@@ -8,11 +8,11 @@
 using namespace std;
 
 struct MonitorInfo {
-    string deviceName;
+    std::wstring deviceName;
+    unsigned long stateFlags;
+    bool isPrimary;
     int width;
     int height;
-    bool isPrimary;
-    DWORD stateFlags;  // Definição correta para DWORD
-};  // <-- Add semicolon here
+};
 
 #endif // MONITORINFO_H
