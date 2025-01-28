@@ -2,16 +2,17 @@
 #define MONITORINFO_H
 
 #include <string>
-#include <windows.h>  // Para definir DWORD e outras funções da API do Windows
-#include <vector>
+#include <windows.h>
 #include <iostream>
 
+using namespace std;
+
 struct MonitorInfo {
-    std::wstring deviceName;
+    string deviceName;
     int width;
     int height;
     bool isPrimary;
-    DWORD stateFlags;  // Definição correta para DWORD
-};
+    DWORD stateFlags;  // DefiniÃ§Ã£o correta para DWORD
+};  // <-- Add semicolon here
 
 #endif // MONITORINFO_H
