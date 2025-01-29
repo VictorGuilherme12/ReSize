@@ -39,7 +39,7 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = V$:/Projetos/Desktop/ReSize/cmake-build-debug/
+cmake_ninja_workdir = V$:/Projetos/Desktop/ReSize/build/
 # =============================================================================
 # Object build statements for EXECUTABLE target ReSize
 
@@ -49,21 +49,21 @@ cmake_ninja_workdir = V$:/Projetos/Desktop/ReSize/cmake-build-debug/
 
 build cmake_object_order_depends_target_ReSize: phony || .
 
-build CMakeFiles/ReSize.dir/main.cpp.obj: CXX_COMPILER__ReSize_unscanned_Debug V$:/Projetos/Desktop/ReSize/main.cpp || cmake_object_order_depends_target_ReSize
-  DEP_FILE = CMakeFiles\ReSize.dir\main.cpp.obj.d
+build CMakeFiles/ReSize.dir/src/main.cpp.obj: CXX_COMPILER__ReSize_unscanned_Debug V$:/Projetos/Desktop/ReSize/src/main.cpp || cmake_object_order_depends_target_ReSize
+  DEP_FILE = CMakeFiles\ReSize.dir\src\main.cpp.obj.d
   FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
   INCLUDES = -IV:/Projetos/Desktop/ReSize/.
   OBJECT_DIR = CMakeFiles\ReSize.dir
-  OBJECT_FILE_DIR = CMakeFiles\ReSize.dir
+  OBJECT_FILE_DIR = CMakeFiles\ReSize.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\ReSize.dir\
   TARGET_PDB = ReSize.pdb
 
-build CMakeFiles/ReSize.dir/MonitorUtils.cpp.obj: CXX_COMPILER__ReSize_unscanned_Debug V$:/Projetos/Desktop/ReSize/MonitorUtils.cpp || cmake_object_order_depends_target_ReSize
-  DEP_FILE = CMakeFiles\ReSize.dir\MonitorUtils.cpp.obj.d
+build CMakeFiles/ReSize.dir/src/MonitorUtils.cpp.obj: CXX_COMPILER__ReSize_unscanned_Debug V$:/Projetos/Desktop/ReSize/src/MonitorUtils.cpp || cmake_object_order_depends_target_ReSize
+  DEP_FILE = CMakeFiles\ReSize.dir\src\MonitorUtils.cpp.obj.d
   FLAGS = -g -std=gnu++14 -fdiagnostics-color=always
   INCLUDES = -IV:/Projetos/Desktop/ReSize/.
   OBJECT_DIR = CMakeFiles\ReSize.dir
-  OBJECT_FILE_DIR = CMakeFiles\ReSize.dir
+  OBJECT_FILE_DIR = CMakeFiles\ReSize.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\ReSize.dir\
   TARGET_PDB = ReSize.pdb
 
@@ -75,9 +75,10 @@ build CMakeFiles/ReSize.dir/MonitorUtils.cpp.obj: CXX_COMPILER__ReSize_unscanned
 #############################################
 # Link the executable ReSize.exe
 
-build ReSize.exe: CXX_EXECUTABLE_LINKER__ReSize_Debug CMakeFiles/ReSize.dir/main.cpp.obj CMakeFiles/ReSize.dir/MonitorUtils.cpp.obj
+build ReSize.exe: CXX_EXECUTABLE_LINKER__ReSize_Debug CMakeFiles/ReSize.dir/src/main.cpp.obj CMakeFiles/ReSize.dir/src/MonitorUtils.cpp.obj
   FLAGS = -g
-  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_FLAGS = -static -static-libgcc -static-libstdc++
+  LINK_LIBRARIES = -luser32  -lgdi32  -lshell32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ReSize.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -91,7 +92,7 @@ build ReSize.exe: CXX_EXECUTABLE_LINKER__ReSize_Debug CMakeFiles/ReSize.dir/main
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D V:\Projetos\Desktop\ReSize\cmake-build-debug && C:\Users\Victor\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe -E echo "No interactive CMake dialog available.""
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D V:\Projetos\Desktop\ReSize\build && C:\Users\Victor\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -102,7 +103,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D V:\Projetos\Desktop\ReSize\cmake-build-debug && C:\Users\Victor\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe --regenerate-during-build -SV:\Projetos\Desktop\ReSize -BV:\Projetos\Desktop\ReSize\cmake-build-debug"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D V:\Projetos\Desktop\ReSize\build && C:\Users\Victor\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe --regenerate-during-build -SV:\Projetos\Desktop\ReSize -BV:\Projetos\Desktop\ReSize\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -120,7 +121,7 @@ build ReSize: phony ReSize.exe
 # =============================================================================
 
 #############################################
-# Folder: V:/Projetos/Desktop/ReSize/cmake-build-debug
+# Folder: V:/Projetos/Desktop/ReSize/build
 
 build all: phony ReSize.exe
 

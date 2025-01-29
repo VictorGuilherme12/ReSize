@@ -9,7 +9,7 @@
 					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
-						"string" : "3.30"
+						"string" : "3.30.5"
 					},
 					"projectIndex" : 0,
 					"source" : ".",
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ReSize::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ReSize-Debug-3080aa15f0c2848fac9e.json",
+					"jsonFile" : "target-ReSize-Debug-c015f7b9890d7ac6b0bd.json",
 					"name" : "ReSize",
 					"projectIndex" : 0
 				}
@@ -49,7 +49,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "V:/Projetos/Desktop/ReSize/cmake-build-debug",
+		"build" : "V:/Projetos/Desktop/ReSize/build",
 		"source" : "V:/Projetos/Desktop/ReSize"
 	},
 	"version" : 

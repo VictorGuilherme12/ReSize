@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "v:/Projetos/Desktop/ReSize/cmake-build-debug"
+			"value" : "v:/Projetos/Desktop/ReSize/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "V:/Projetos/Desktop/ReSize/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "V:/Projetos/Desktop/ReSize/build/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -1279,7 +1279,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "V:/Projetos/Desktop/ReSize/cmake-build-debug"
+			"value" : "V:/Projetos/Desktop/ReSize/build"
 		},
 		{
 			"name" : "ReSize_IS_TOP_LEVEL",

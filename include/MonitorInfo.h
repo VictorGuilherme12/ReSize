@@ -8,7 +8,7 @@
 using namespace std;
 
 struct MonitorInfo {
-    std::wstring deviceName;
+    wstring deviceName;
     unsigned long stateFlags;
     bool isPrimary;
     int width;

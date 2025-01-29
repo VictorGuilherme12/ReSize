@@ -1,6 +1,6 @@
 #define UNICODE
 #define _UNICODE
-#include "monitorutils.h"
+#include "include/MonitorUtils.h"
 #include <windows.h>
 #include <iostream>
 #include <string>
@@ -83,7 +83,7 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
     dm.dmBitsPerPel = currentBitsPerPel;
     dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY | DM_BITSPERPEL;
 
-    // Tentar aplicar as novas configurações
+
     LONG result = ChangeDisplaySettingsExW(
         deviceName.c_str(),
         &dm,
@@ -99,7 +99,7 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
         return true;
 
     case DISP_CHANGE_BADMODE:
-        // Se falhou, tentar encontrar uma frequência compatível
+
         {
             DEVMODEW testDm = { 0 };
             testDm.dmSize = sizeof(DEVMODEW);
@@ -145,7 +145,7 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
         wcout << L"Erro desconhecido ao mudar a resolução. Código: " << result << endl;
     }
 
-    // Se falhou, restaurar a resolução original
+
     dm.dmPelsWidth = currentWidth;
     dm.dmPelsHeight = currentHeight;
     dm.dmDisplayFrequency = currentFrequency;
