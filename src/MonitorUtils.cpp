@@ -2,7 +2,9 @@
 #define _UNICODE
 #include "include/MonitorUtils.h"
 #include <windows.h>
+#include <wingdi.h>
 #include <iostream>
+#include <vector>
 #include <string>
 
 using namespace std;
@@ -24,8 +26,7 @@ vector<MonitorInfo> EnumerateAllMonitors() {
             if (EnumDisplaySettingsW(dd.DeviceName, ENUM_CURRENT_SETTINGS, &dm)) {
                 info.width = dm.dmPelsWidth;
                 info.height = dm.dmPelsHeight;
-            }
-            else {
+            } else {
                 info.width = -1;
                 info.height = -1;
             }
@@ -83,7 +84,6 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
     dm.dmBitsPerPel = currentBitsPerPel;
     dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY | DM_BITSPERPEL;
 
-
     LONG result = ChangeDisplaySettingsExW(
         deviceName.c_str(),
         &dm,
@@ -99,7 +99,6 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
         return true;
 
     case DISP_CHANGE_BADMODE:
-
         {
             DEVMODEW testDm = { 0 };
             testDm.dmSize = sizeof(DEVMODEW);
@@ -145,7 +144,6 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
         wcout << L"Erro desconhecido ao mudar a resolução. Código: " << result << endl;
     }
 
-
     dm.dmPelsWidth = currentWidth;
     dm.dmPelsHeight = currentHeight;
     dm.dmDisplayFrequency = currentFrequency;
@@ -165,37 +163,46 @@ bool ChangeResolution(const wstring& deviceName, int width, int height) {
 bool SetPrimaryMonitor(const wstring& deviceName) {
     DISPLAY_DEVICEW dd = { sizeof(DISPLAY_DEVICEW), {0} };
     DWORD deviceNum = 0;
+    bool foundTarget = false;
 
+    // Encontrar o monitor alvo
     while (EnumDisplayDevicesW(nullptr, deviceNum, &dd, 0)) {
         if (wcscmp(dd.DeviceName, deviceName.c_str()) == 0) {
-            DEVMODEW dm = { 0 };
-            dm.dmSize = sizeof(DEVMODEW);
-
-            if (!EnumDisplaySettingsW(dd.DeviceName, ENUM_CURRENT_SETTINGS, &dm)) {
-                wcout << L"Falha ao obter configurações de exibição. Erro: " << GetLastError() << endl;
-                return false;
-            }
-
-            LONG result = ChangeDisplaySettingsExW(
-                dd.DeviceName,
-                &dm,
-                nullptr,
-                CDS_UPDATEREGISTRY | CDS_SET_PRIMARY,
-                nullptr
-            );
-
-            if (result == DISP_CHANGE_SUCCESSFUL) {
-                wcout << L"Monitor primário configurado com sucesso." << endl;
-                return true;
-            }
-            else {
-                wcout << L"Falha ao configurar o monitor primário. Código de erro: " << result << endl;
-                return false;
-            }
+            foundTarget = true;
+            break;
         }
         deviceNum++;
     }
 
-    wcout << L"Monitor não encontrado." << endl;
-    return false;
+    if (!foundTarget) {
+        wcout << L"Monitor não encontrado!" << endl;
+        return false;
+    }
+
+    // Obter as configurações atuais do monitor alvo
+    DEVMODEW dmNew = { 0 };
+    dmNew.dmSize = sizeof(DEVMODEW);
+    if (!EnumDisplaySettingsW(deviceName.c_str(), ENUM_CURRENT_SETTINGS, &dmNew)) {
+        wcout << L"Falha ao obter configurações do monitor." << endl;
+        return false;
+    }
+
+    // Manter a posição e definir como primário
+    dmNew.dmFields = DM_POSITION | DM_PELSWIDTH | DM_PELSHEIGHT;
+    dmNew.dmPosition.x = 0;
+    dmNew.dmPosition.y = 0;
+
+    LONG res = ChangeDisplaySettingsExW(deviceName.c_str(), &dmNew, nullptr, CDS_UPDATEREGISTRY | CDS_GLOBAL, nullptr);
+    if (res == DISP_CHANGE_SUCCESSFUL) {
+        wcout << L"Monitor alterado para primário com sucesso!" << endl;
+
+        // Reiniciar o Explorer para garantir que o Windows reconheça a mudança
+        system("taskkill /f /im explorer.exe");
+        system("start explorer.exe");
+
+        return true;
+    } else {
+        wcout << L"Falha ao definir monitor primário. Código de erro: " << res << endl;
+        return false;
+    }
 }
